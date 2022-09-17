@@ -9,6 +9,7 @@ public class UpdatableData : ScriptableObject
 
     [SerializeField] private bool autoUpdate;
 
+#if UNITY_EDITOR
 	protected virtual void OnValidate()
 	{
 		if (autoUpdate)
@@ -20,4 +21,5 @@ public class UpdatableData : ScriptableObject
 		UnityEditor.EditorApplication.update -= NotifyOfUpdatedValues;
 		OnValuesUpdated?.Invoke();
 	}
+#endif
 }
