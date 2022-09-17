@@ -20,7 +20,7 @@ MonoBehaviour:
     Lacunarity: 2
     Seed: 0
     Offset: {x: 0, y: 0}
-    NormalizeMode: 1
+    NormalizeMode: 0
   UseFalloff: 0
   HeightMultiplier: 50
   HeightCurve:
