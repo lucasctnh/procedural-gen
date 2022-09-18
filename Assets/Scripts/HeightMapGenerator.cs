@@ -13,6 +13,15 @@ public static class HeightMapGenerator
 		float minValue = float.MaxValue;
 		float maxValue = float.MinValue;
 
+		if (settings.UseFalloff && width == height)
+		{
+			float[,] falloffMap = FalloffGenerator.GenerateFalloffMap(width);
+
+			for (int y = 0; y < height; y++)
+				for (int x = 0; x < width; x++)
+					values[x, y] = Mathf.Clamp01(values[x, y] - falloffMap[x, y]);
+		}
+
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)
