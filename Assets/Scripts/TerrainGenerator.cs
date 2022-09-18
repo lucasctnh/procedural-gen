@@ -1,3 +1,4 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,17 @@ public class TerrainGenerator : MonoBehaviour
 	private int chunksVisibleInViewDst;
 	private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
 	private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
+	private bool wasFirstInputMade;
+
+	private void Awake()
+	{
+		StarterAssetsInputs.OnAnyMove += OnFirstInput;
+	}
+
+	private void OnDestroy()
+	{
+		StarterAssetsInputs.OnAnyMove -= OnFirstInput;
+	}
 
 	private void Start()
 	{
@@ -32,6 +44,7 @@ public class TerrainGenerator : MonoBehaviour
 		meshWorldSize = meshSettings.MeshWorldSize;
 		chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshWorldSize);
 
+		viewerPositionOld = viewerPosition - Vector2.one * 500f;
 		UpdateVisibleChunks();
 	}
 
@@ -47,7 +60,8 @@ public class TerrainGenerator : MonoBehaviour
 
 		if ((viewerPositionOld - viewerPosition).sqrMagnitude > SqrViewerMoveThresholdForChunkUpdate)
 		{
-			viewerPositionOld = viewerPosition;
+			if (wasFirstInputMade)
+				viewerPositionOld = viewerPosition;
 			UpdateVisibleChunks();
 		}
 	}
@@ -93,5 +107,12 @@ public class TerrainGenerator : MonoBehaviour
 			visibleTerrainChunks.Add(chunk);
 		else
 			visibleTerrainChunks.Remove(chunk);
+	}
+
+	private void OnFirstInput()
+	{
+		if (wasFirstInputMade) return;
+
+		wasFirstInputMade = true;
 	}
 }
